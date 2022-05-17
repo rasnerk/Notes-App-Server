@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/rasnerk/Notes-App-Server#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.3.3"
