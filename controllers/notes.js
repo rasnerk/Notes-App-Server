@@ -11,26 +11,18 @@ const createNote = (req,res) => {
             if(error) return res.status(417).send(error)
             if(doc) return res.send(`Note with the title: ${doc.Title} already exists`)
         }
-        // if (err) return res.send(err)
-        // if (doc) return res.send(`Note with the title: ${doc.Title} already exists`)
     })
 
 }
 
 const deleteNote = (req,res) => {
-    const { nid } = req.body;
+    const { nid } = req.params;
     Note.findByIdAndDelete({_id: nid}, doc => {
         try {
             res.send(`${doc.Title} deleted successfully!`)
         } catch (error) {
             return res.send(error)
         }
-    })
-}
-
-const updateNote = (req,res) => {
-    Note.findByIdAndUpdate({_id: nid}, (err,doc) => {
-
     })
 }
 
@@ -43,4 +35,4 @@ const getUsersNotes = async (req,res) => {
     res.status(200).send(usersNotes)
 }
 
-module.exports = { createNote, deleteNote, updateNote, getUsersNotes }
+module.exports = { createNote, deleteNote, getUsersNotes }
