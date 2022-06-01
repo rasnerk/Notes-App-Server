@@ -1,14 +1,14 @@
 const Note = require('../db/schemas/notes')
 
 const createNote = (req,res) => {
-    const { Title, Body, type, uid } = req.body;
+    const { Title } = req.body;
 
     Note.findOne({Title: Title}, async doc => {
         try {
-            const newNote = await Note.create({Title: Title, Body: Body, type: type, uid: uid})
-            return newNote ? res.send(`${newNote.Title} created successfully!`) : res.send(`Failed to create note`)  
+            const newNote = await Note.create(req.body)
+            return newNote ? res.status(200).send(`${newNote.Title} created successfully!`) : res.status(417).send(`Failed to create note`)  
         } catch (error) {
-            if(error) return res.send(error)
+            if(error) return res.status(417).send(error)
             if(doc) return res.send(`Note with the title: ${doc.Title} already exists`)
         }
         // if (err) return res.send(err)
@@ -25,8 +25,6 @@ const deleteNote = (req,res) => {
         } catch (error) {
             return res.send(error)
         }
-        // if (err) return res.send(err)
-        // res.send(`${doc.Title} deleted successfully!`)
     })
 }
 
@@ -36,17 +34,13 @@ const updateNote = (req,res) => {
     })
 }
 
-const getUsersNotes = (req,res) => {
+const getUsersNotes = async (req,res) => {
     const {uid} = req.params;
-    Note.find({uid: uid}, docs => {
-        try {
-            res.send(docs)
-        } catch (error) {
-            return res.send(error)
-        }
-        // if (err) return res.send(err)
-        // res.send(docs)
-    })
+    const usersNotes = await Note.find({uid: uid});
+    if (usersNotes === null || usersNotes === undefined) {
+        return res.status(500).send('Cannot Find Users Notes')
+    }
+    res.status(200).send(usersNotes)
 }
 
 module.exports = { createNote, deleteNote, updateNote, getUsersNotes }
